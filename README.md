@@ -2,7 +2,7 @@
 
 ## screen
 
-![image](https://github.com/t-iwasaki/arduboy-JumpBoy2/blob/master/docs/image/stage1.png?raw=true "stage1")
+![image](https://github.com/t-iwasaki/arduboy-JumpBoy2/blob/main/docs/image/stage1.png?raw=true "stage1")
 
 ## Description
 
