@@ -1,0 +1,262 @@
+/*----------------------------------
+               JumpBoy2
+
+
+    Created by:takaiwa@gmail.com
+    Game Copyright (C) 2016 takaiwa@gmail.com
+
+  ----------------------------------*/
+#include <Arduboy2.h>
+#include <ArduboyTones.h>
+
+#include "Bitmaps.h"
+
+#define NOTE_A1  110  //spring
+#define NOTE_C2  131  //miss spring item(-)
+#define NOTE_G2  196
+#define NOTE_C3  262  // add coins item
+#define NOTE_G3  392  //coin
+#define NOTE_C4  523  //heart item,spring item(+),flag item
+
+
+#define MODE_TITLE  1
+#define MODE_START  2
+#define MODE_RUNNING  3
+#define MODE_GAMECLEAR  4
+#define MODE_GAMEOVER  5
+
+Arduboy2 arduboy;
+ArduboyTones sound(arduboy.audio.enabled);
+
+uint8_t       pMode = MODE_TITLE;
+
+unsigned long lTime;
+const byte    FPS = 1000 / 30;
+
+bool          pMissing = false;
+
+unsigned long pWait = 0;
+bool          pWaitFlg = false;
+
+
+float  pASpeed = 1.5;
+
+uint8_t  boundY = 10;
+uint8_t  boundH = 10;
+
+uint8_t  lives = 3;
+uint8_t  level = 1;
+
+int stage = 1;
+int record = 0;
+
+int concurrent_coin_max = 1;
+
+/*-------------------------------
+    levelStart
+  ------------------------------*/
+void levelStart(int lvl)
+{
+  stage = 1;
+  pASpeed = 1.5;
+
+  arduboy.clear();
+
+  if (lvl == 1) {
+    stage = 1;
+    lives = 3;
+    initSpeedScroll(1);
+    arduboy.drawSlowXYBitmap(17, 10, bStart, 96, 48, 1);
+  }
+
+  arduboy.display();
+
+  delay(2000);
+
+  resetKey();
+  initPlayer(pASpeed);
+  initSpring();
+  initCoin(concurrent_coin_max,false);
+  initPowerUp();
+  initEnemy();
+
+  level = lvl;
+
+  pMode = MODE_RUNNING;
+}
+
+
+/*-------------------------------
+    miss
+  ------------------------------*/
+void miss()
+{
+  if (!pMissing) {
+    pMissing = true;
+    sound.tone(NOTE_C2, 160); 
+    delay(3000);
+
+    initPowerUp();
+    lives--;
+    if (lives <= 0) {
+      pMode = MODE_TITLE;
+    }
+    initPlayer(pASpeed);
+    pMissing = false;
+  }
+}
+
+
+/*-------------------------------
+    stageClear
+  ------------------------------*/
+void stageClear()
+{
+  sound.tone(NOTE_C4, 160); 
+  delay(3000);
+
+  record = stage;
+
+  pASpeed+=0.5;
+  speedupScroll();
+
+  if (pASpeed > 2) {
+    pASpeed = 1.5;
+  }
+
+  stage++;
+
+  resetKey();
+  initPlayer(pASpeed);
+  initSpring();
+  initCoin(concurrent_coin_max,false);
+
+  arduboy.clear();
+  arduboy.drawSlowXYBitmap(17, 10, bClear, 96, 48, 1);
+  arduboy.display();
+
+  delay(2000);
+}
+
+
+/*--------------------------
+     Draw Header
+  -------------------------*/
+void drawHeader()
+{
+  arduboy.fillRect(0, 0, 127, 10, 1);
+  for (int i = 0; i < lives; i++) {
+    arduboy.drawBitmap(3 + (i * 10) , 1 , bHeart, 8, 8, 0);
+  }
+  arduboy.setCursor(72, 1);
+  arduboy.write(' ');
+  arduboy.write('C');
+  arduboy.write('O');
+  arduboy.write('I');
+  arduboy.write('N');
+  arduboy.write(' ');
+  arduboy.print(getCoinQty());
+  arduboy.write(' ');
+}
+
+
+/*-------------------------
+    displayTitle
+  ------------------------ */
+void displayTitle()
+{
+  int flash = 0;
+  
+  while (true) {
+    delay( 30 );
+    arduboy.clear();
+
+    arduboy.setCursor(36, 1);
+    arduboy.print("JUMP BOY2");
+    
+    arduboy.drawSlowXYBitmap(14, 12, bTitle, 104, 36, 1);
+
+    flash++;
+    flash %= 50;
+
+    if (record > 0) {
+      arduboy.setCursor(30, 44);
+      arduboy.print(" record: ");
+      arduboy.print(record);
+      arduboy.print(" ");         
+    }
+
+    if (flash < 25) {
+      arduboy.setCursor(30, 54);
+      arduboy.print("Press A or B");
+    }
+
+    arduboy.display();
+
+    if (arduboy.pressed(A_BUTTON) || arduboy.pressed(B_BUTTON)) {
+      pMode = MODE_START;
+      break;
+    }
+  }
+}
+
+
+/*-------------------------
+    setup
+  ------------------------ */
+void setup()
+{
+  //Serial.print("Entering Setup");
+  arduboy.begin();
+  arduboy.audio.on();
+
+  displayTitle();
+  lTime = millis();
+  arduboy.initRandomSeed();
+}
+
+
+/*-------------------------
+    LOOP
+  ------------------------ */
+void loop()
+{ 
+  if (pMode == MODE_TITLE) {
+    displayTitle();
+    return;
+  }
+
+  if (pMode == MODE_START) {
+    levelStart(1);
+    return;
+  }
+  
+  if (pWaitFlg) {
+    if (millis() > pWait) {
+      //Serial.println("wait brake....");
+      pWaitFlg = false;
+      return;
+    } else {
+      //Serial.print("waiting....\n");
+      //Serial.println(millis());
+      return;
+    }
+  }
+
+  //Serial.print("Loop");
+  if (millis() > lTime + FPS) {
+    arduboy.clear();
+    lTime = millis();
+
+    drawHeader();
+
+    moveSpring();
+    moveCoin();
+    movePowerUp();
+    movePlayer();
+    moveEnemy();
+    moveKey();
+
+    arduboy.display();
+  }
+}
