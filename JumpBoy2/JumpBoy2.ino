@@ -18,7 +18,6 @@
 #define NOTE_G3  392  //coin
 #define NOTE_C4  523  //heart item,spring item(+),flag item
 
-
 #define MODE_TITLE  1
 #define MODE_START  2
 #define MODE_RUNNING  3
@@ -57,7 +56,6 @@ int concurrent_coin_max = 1;
   ------------------------------*/
 void levelStart(int lvl)
 {
-  stage = 1;
   pASpeed = 1.5;
 
   arduboy.clear();
@@ -78,7 +76,7 @@ void levelStart(int lvl)
   initSpring();
   initCoin(concurrent_coin_max,false);
   initPowerUp();
-  initEnemy();
+  initEnemy(1);
 
   level = lvl;
 
@@ -92,6 +90,7 @@ void levelStart(int lvl)
 void miss()
 {
   if (!pMissing) {
+    arduboy.display();
     pMissing = true;
     sound.tone(NOTE_C2, 160); 
     delay(3000);
@@ -124,7 +123,8 @@ void stageClear()
     pASpeed = 1.5;
   }
 
-  stage++;
+  stage+=1;
+  initEnemy(stage);
 
   resetKey();
   initPlayer(pASpeed);
@@ -150,11 +150,11 @@ void drawHeader()
   }
   arduboy.setCursor(72, 1);
   arduboy.write(' ');
+  arduboy.write('S');
+  arduboy.write(':');
+  arduboy.print(stage);
   arduboy.write('C');
-  arduboy.write('O');
-  arduboy.write('I');
-  arduboy.write('N');
-  arduboy.write(' ');
+  arduboy.write(':');
   arduboy.print(getCoinQty());
   arduboy.write(' ');
 }

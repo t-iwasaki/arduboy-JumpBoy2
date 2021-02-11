@@ -44,8 +44,8 @@ void moveCulcPlayer()
     player.y+=player.ay;
 
     // Range Check.
-    if (player.y  > 56 - boundH) {
-      player.y  = 56 - boundH;
+    if (player.y  > 56 - player.h) {
+      player.y  = 56 - player.h;
     }
     if (player.y < boundY) {
       player.y  = boundY;
@@ -62,7 +62,7 @@ void moveCulcPlayer()
 void collisionPlayer()
 {
     bool is_miss = false;
-    if (player.y >= 46) {
+    if (player.y >= 56 - player.h) {
       player.ay = -1 * player.ay;
       collisionSpring(player.x, is_miss);
       if (is_miss) {
