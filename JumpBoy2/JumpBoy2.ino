@@ -17,6 +17,7 @@
 #define NOTE_C3  262  // add coins item
 #define NOTE_G3  392  //coin
 #define NOTE_C4  523  //heart item,spring item(+),flag item
+#define NOTE_A4  440  //Enemy appears
 
 #define MODE_TITLE  1
 #define MODE_START  2
@@ -74,9 +75,10 @@ void levelStart(int lvl)
   resetKey();
   initPlayer(pASpeed);
   initSpring();
-  initCoin(concurrent_coin_max,false);
+  initCoin(concurrent_coin_max);
   initPowerUp();
   initEnemy(1);
+  initBall(1);
 
   level = lvl;
 
@@ -92,7 +94,7 @@ void miss()
   if (!pMissing) {
     arduboy.display();
     pMissing = true;
-    sound.tone(NOTE_C2, 160); 
+    sound.tone(NOTE_C2, 160);
     delay(3000);
 
     initPowerUp();
@@ -107,29 +109,49 @@ void miss()
 
 
 /*-------------------------------
+    enemyAppears
+  ------------------------------*/
+void enemyAppears()
+{
+  arduboy.setCursor(5, 30);
+  arduboy.print("Enemy appears!");
+  arduboy.display();
+  initPlayer(pASpeed);
+
+  if (stage >= 6) {
+    initBall(stage);
+  }
+
+  sound.tone(NOTE_A4, 200);
+  delay(4000);
+}
+
+
+/*-------------------------------
     stageClear
   ------------------------------*/
 void stageClear()
 {
-  sound.tone(NOTE_C4, 160); 
+  sound.tone(NOTE_C4, 160);
   delay(3000);
 
   record = stage;
 
-  pASpeed+=0.5;
+  pASpeed += 0.5;
   speedupScroll();
 
   if (pASpeed > 2) {
     pASpeed = 1.5;
   }
 
-  stage+=1;
+  stage += 1;
   initEnemy(stage);
 
   resetKey();
+  initBall(stage);
   initPlayer(pASpeed);
   initSpring();
-  initCoin(concurrent_coin_max,false);
+  initCoin(concurrent_coin_max);
 
   arduboy.clear();
   arduboy.drawSlowXYBitmap(17, 10, bClear, 96, 48, 1);
@@ -166,14 +188,14 @@ void drawHeader()
 void displayTitle()
 {
   int flash = 0;
-  
+
   while (true) {
     delay( 30 );
     arduboy.clear();
 
     arduboy.setCursor(36, 1);
     arduboy.print("JUMP BOY2");
-    
+
     arduboy.drawSlowXYBitmap(14, 12, bTitle, 104, 36, 1);
 
     flash++;
@@ -183,7 +205,7 @@ void displayTitle()
       arduboy.setCursor(30, 44);
       arduboy.print(" record: ");
       arduboy.print(record);
-      arduboy.print(" ");         
+      arduboy.print(" ");
     }
 
     if (flash < 25) {
@@ -220,7 +242,7 @@ void setup()
     LOOP
   ------------------------ */
 void loop()
-{ 
+{
   if (pMode == MODE_TITLE) {
     displayTitle();
     return;
@@ -230,7 +252,7 @@ void loop()
     levelStart(1);
     return;
   }
-  
+
   if (pWaitFlg) {
     if (millis() > pWait) {
       //Serial.println("wait brake....");
@@ -253,9 +275,10 @@ void loop()
     moveSpring();
     moveCoin();
     movePowerUp();
-    movePlayer();
     moveEnemy();
     moveKey();
+    moveBall();
+    movePlayer();
 
     arduboy.display();
   }

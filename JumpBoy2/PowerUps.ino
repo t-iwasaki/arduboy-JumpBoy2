@@ -51,7 +51,7 @@ void moveCulcPowerUp()
     powerup.spCount = 0;
     uint8_t r = random(100);
     uint8_t item[] = {5, 20, 30, 45, 50};
-    for (int i = 0;i < 5;i++) {
+    for (int i = 0; i < 5; i++) {
       if (r <= item[i]) {
         createPowerUp(i);
         break;

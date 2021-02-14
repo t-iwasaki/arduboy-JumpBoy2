@@ -7,10 +7,9 @@ struct Coin
 {
   uint8_t spCount = 0;
   uint8_t qty = 0;
-  uint8_t norma = 10;
+  uint8_t norma1 = 5;
+  uint8_t norma2 = 10;
   uint8_t concurrent_coin_max = CONCURRENT_COIN_MAX;
-  bool is_puzzle = false;
-  bool is_puzzle_prepare = false;  
 } coin;
 
 
@@ -24,17 +23,12 @@ struct Coins
 Coins coins[CONCURRENT_COIN_MAX];
 
 
-void initCoin(int concurrent_coin_max,bool is_puzzle)
+void initCoin(int concurrent_coin_max)
 {
   coin.spCount = 0;
   coin.qty = 0;
-  
-  coin.is_puzzle = is_puzzle;
-  coin.is_puzzle_prepare = false;
-
-  coin.norma = (coin.is_puzzle) ? concurrent_coin_max : 10;
   coin.concurrent_coin_max = (concurrent_coin_max > CONCURRENT_COIN_MAX ) ? CONCURRENT_COIN_MAX : concurrent_coin_max;
-  
+
   for (int i = 0; i < CONCURRENT_COIN_MAX; i++) {
     coins[i].active = false;
   }
@@ -43,7 +37,7 @@ void initCoin(int concurrent_coin_max,bool is_puzzle)
 
 void updateCurrentCoinMax(int concurrent_coin_max)
 {
-  coin.concurrent_coin_max = (concurrent_coin_max > CONCURRENT_COIN_MAX ) ? CONCURRENT_COIN_MAX : concurrent_coin_max;  
+  coin.concurrent_coin_max = (concurrent_coin_max > CONCURRENT_COIN_MAX ) ? CONCURRENT_COIN_MAX : concurrent_coin_max;
 }
 
 
@@ -62,18 +56,13 @@ void moveCoin()
 
 void moveCulcCoin()
 {
-  if (coin.is_puzzle && !coin.is_puzzle_prepare) {
-    coin.is_puzzle_prepare = true;
-    _createCoins();
-  } else {
-    coin.spCount++;
-    if (coin.spCount == 200)
-    {
-      coin.spCount = 0;
-      updateCurrentCoinMax(1);
-    } 
-      _createCoins();
+  coin.spCount++;
+  if (coin.spCount == 200)
+  {
+    coin.spCount = 0;
+    updateCurrentCoinMax(1);
   }
+  _createCoins();
   _checkCoinsLife();
 }
 
@@ -82,11 +71,6 @@ void _createCoins()
 {
   for (int i = 0; i < coin.concurrent_coin_max; i++) {
     if (coins[i].active == false) {
-      if (coin.is_puzzle) {
-        // 高さは同じで横に等間隔にコインを配置
-        coins[i].x = 10 + i * 10;
-        coins[i].y = 10 + 30;
-      }
       int x = 10 + random(100);
       int y = 10 + random(34);
 
@@ -94,7 +78,7 @@ void _createCoins()
         coins[i].x = x;
         coins[i].y = y;
         coins[i].spCount = 40 + random(80);
-//        coins[i].spCount = 50;
+        //        coins[i].spCount = 50;
         coins[i].active = true;
       }
     }
@@ -125,9 +109,13 @@ void collisionCoins(float playerX, float playerY)
         sound.tone(NOTE_G3, 80);
         coin.qty++;
         coins[i].active = false;
-        if (coin.qty >= coin.norma) {          
+        if (coin.qty == coin.norma2) {
           initKey();
-          return;
+        } else if (coin.qty == coin.norma1) {
+          waitBall();
+          enemyAppears();
+          initSpring();
+          activeEnemy();
         }
       }
     }
@@ -146,6 +134,6 @@ void drawCoin()
   for (int i = 0; i < coin.concurrent_coin_max; i++) {
     if (coins[i].active) {
       arduboy.drawBitmap(coins[i].x, coins[i].y, bCoin, 8, 8, 1);
-    }    
+    }
   }
 }

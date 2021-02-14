@@ -19,10 +19,18 @@ struct Enemy
 
 
 void initEnemy(int no) {
+  if (no > 3) {
+    no = no % 3 + 1;
+  }
   enemy.spCount = 0;
   enemy.x = 100;
   enemy.y = 10 + random(34);
   enemy.no = no;
+  enemy.active = false;
+}
+
+
+void activeEnemy() {
   enemy.active = true;
 }
 
@@ -30,7 +38,7 @@ void initEnemy(int no) {
 void moveEnemy()
 {
   if (enemy.active) {
-    enemy.spCount++;  
+    enemy.spCount++;
     moveCulcEnemy();
   }
 }
@@ -38,7 +46,7 @@ void moveEnemy()
 
 void moveCulcEnemy()
 {
-  switch(enemy.no){
+  switch (enemy.no) {
     case 1:
       actionEnemySnake();
       break;
@@ -51,7 +59,6 @@ void moveCulcEnemy()
     default:
       actionEnemyCat();
       break;
-    break;    
   }
 }
 
@@ -67,10 +74,10 @@ void actionEnemySnake() {
     //restart
     enemy.spCount = 0;
   }
-  else{
+  else {
     int r = 1;
-    enemy.y+=r*enemy.ay;
-    rangeMoveEnemy();    
+    enemy.y += r * enemy.ay;
+    rangeMoveEnemy();
   }
   arduboy.drawSlowXYBitmap(enemy.x, enemy.y, bEnemySnake, 16, 16, 1);
 }
@@ -84,11 +91,11 @@ void actionEnemyCat() {
     //restart
     enemy.spCount = 0;
   }
-  else{
+  else {
     int r = 1;
-    enemy.x+=r*enemy.ax;
-    enemy.y+=r*enemy.ay;
-    rangeMoveEnemy();    
+    enemy.x += r * enemy.ax;
+    enemy.y += r * enemy.ay;
+    rangeMoveEnemy();
   }
   arduboy.drawSlowXYBitmap(enemy.x, enemy.y, bEnemyCat, 16, 16, 1);
 }
@@ -102,11 +109,11 @@ void actionEnemyRobo() {
     //restart
     enemy.spCount = 0;
   }
-  else{
+  else {
     int r = random(3);
-    enemy.x+=r*enemy.ax;
-    enemy.y+=r*enemy.ay;
-    rangeMoveEnemy();    
+    enemy.x += r * enemy.ax;
+    enemy.y += r * enemy.ay;
+    rangeMoveEnemy();
   }
   arduboy.drawSlowXYBitmap(enemy.x, enemy.y, bEnemyRobo, 16, 16, 1);
 }
@@ -130,10 +137,10 @@ void rangeMoveEnemy() {
 void collisionEnemy(float playerX, float playerY, int playerW, int playerH)
 {
   if (enemy.active) {
-    if (enemy.x < playerX + playerW/2 && playerX + playerW/2 < enemy.x + enemy.w &&
-        enemy.y < playerY + playerH/2 && playerY + playerH/2 < enemy.y + enemy.h)
+    if (enemy.x < playerX + playerW / 2 && playerX + playerW / 2 < enemy.x + enemy.w &&
+        enemy.y < playerY + playerH / 2 && playerY + playerH / 2 < enemy.y + enemy.h)
     {
-        miss();
+      miss();
     }
   }
 }

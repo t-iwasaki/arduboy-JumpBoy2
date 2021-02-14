@@ -84,7 +84,7 @@ void collisionSpring(float playerX, bool &is_miss)
     if (x < 0) {
       x = 128 + x;
     }
-    x+=4;
+    x += 4;
     if (playerX - 4 <= x && x <= playerX + 12 && pSprings[i] > 0) {
       pSprings[i] -= 1;
       is_miss = false;
@@ -119,7 +119,7 @@ void moveSpring()
   ----------------------*/
 void moveCulcSpring()
 {
-  pScroll-=pScrollSpeed;
+  pScroll -= pScrollSpeed;
   if (pScroll < 0) {
     pScroll = 127;
   }
@@ -139,8 +139,8 @@ void initSpeedScroll(int16_t s)
 void speedupScroll()
 {
   pScrollSpeed++;
-  if (pScrollSpeed > 5){
-    pScrollSpeed = 0;
+  if (pScrollSpeed > 5) {
+    pScrollSpeed = 1;
   }
 }
 

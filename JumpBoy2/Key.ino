@@ -23,13 +23,6 @@ void resetKey() {
   key.active = false;
 }
 
-void createKey(uint8_t type)
-{
-  key.x = 120;
-  key.y = 10 + random(34);
-  key.active = true;
-}
-
 
 void moveKey()
 {
@@ -42,8 +35,8 @@ void moveKey()
 void collisionKey(float playerX, float playerY, int playerW, int playerH)
 {
   if (key.active) {
-    if (key.x < playerX + playerW/2 && playerX + playerW/2 < key.x + key.w &&
-        key.y < playerY + playerH/2 && playerY + playerH/2 < key.y + key.h)
+    if (key.x < playerX + playerW / 2 && playerX + playerW / 2 < key.x + key.w &&
+        key.y < playerY + playerH / 2 && playerY + playerH / 2 < key.y + key.h)
     {
       stageClear();
       key.active = false;
