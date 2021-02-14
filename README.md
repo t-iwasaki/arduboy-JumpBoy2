@@ -1,4 +1,4 @@
-# JumpBoy-Arduboy2
+# Arduboy-JumpBoy2
 
 ## screen
 
