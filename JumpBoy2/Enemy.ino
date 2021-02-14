@@ -40,6 +40,9 @@ void moveEnemy()
   if (enemy.active) {
     enemy.spCount++;
     moveCulcEnemy();
+    if (collisionBullet(enemy.x, enemy.y, enemy.w, enemy.h)) {
+      enemy.spCount = 201;
+    }
   }
 }
 

@@ -79,6 +79,7 @@ void levelStart(int lvl)
   initPowerUp();
   initEnemy(1);
   initBall(1);
+  initBullet(1);
 
   level = lvl;
 
@@ -278,6 +279,7 @@ void loop()
     moveEnemy();
     moveKey();
     moveBall();
+    moveBullet();
     movePlayer();
 
     arduboy.display();

@@ -55,6 +55,9 @@ void moveBall()
       if (balls[i].x < 0) {
         balls[i].active = false;
       }
+      if (collisionBullet(balls[i].x, balls[i].y, balls[i].w, balls[i].h)) {
+        balls[i].active = false;
+      }
       arduboy.drawSlowXYBitmap(balls[i].x, balls[i].y, bBird, balls[i].w, balls[i].h, 1);
     } else {
       if (balls[i].inispCount < balls[i].spCount) {

@@ -35,6 +35,10 @@ void movePlayer()
 
 void moveCulcPlayer()
 {
+  if (arduboy.pressed(A_BUTTON) || arduboy.pressed(B_BUTTON)) {
+    fireBullet(player.x, player.y);
+  }
+
   if (arduboy.pressed(LEFT_BUTTON)) {
     player.x -= player.ax;
   } else if (arduboy.pressed(RIGHT_BUTTON)) {
