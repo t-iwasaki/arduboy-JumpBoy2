@@ -171,11 +171,12 @@ void drawHeader()
   for (int i = 0; i < lives; i++) {
     arduboy.drawBitmap(3 + (i * 10) , 1 , bHeart, 8, 8, 0);
   }
-  arduboy.setCursor(72, 1);
+  arduboy.setCursor(60, 1);
   arduboy.write(' ');
   arduboy.write('S');
   arduboy.write(':');
   arduboy.print(stage);
+  arduboy.write(' ');
   arduboy.write('C');
   arduboy.write(':');
   arduboy.print(getCoinQty());
