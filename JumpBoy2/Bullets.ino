@@ -29,10 +29,11 @@ void initBullet(int no) {
 void fireBullet(int x,int y){
   for (int i = 0; i < CONCURRENT_BULLET_MAX; i++) {
     if (!bullets[i].active) {
+      sound.tone(NOTE_E4, 80);
       bullets[i].active = true;
       bullets[i].x = x;
       bullets[i].y = y;
-      break;
+      return;
     }
   }
 }
@@ -60,6 +61,7 @@ bool collisionBullet(float X, float Y, int W, int H)
       float by = bullets[i].y + bullets[i].h / 2;
       if (X < bx && bx < X + W && Y < by && by < Y + H) {        
         bullets[i].active = false;
+        sound.tone(NOTE_A3, 80);
         return true;
       }
     }

@@ -14,10 +14,12 @@
 #define NOTE_A1  110  //spring
 #define NOTE_C2  131  //miss spring item(-)
 #define NOTE_G2  196
-#define NOTE_C3  262  // add coins item
+#define NOTE_C3  262  //add coins item
 #define NOTE_G3  392  //coin
+#define NOTE_A3  440  //BOMB
 #define NOTE_C4  523  //heart item,spring item(+),flag item
-#define NOTE_A4  440  //Enemy appears
+#define NOTE_E4  659  //Fire
+#define NOTE_A4  880  //Enemy appears
 
 #define MODE_TITLE  1
 #define MODE_START  2
@@ -232,8 +234,6 @@ void setup()
 {
   //Serial.print("Entering Setup");
   arduboy.begin();
-  arduboy.audio.on();
-
   displayTitle();
   lTime = millis();
   arduboy.initRandomSeed();
