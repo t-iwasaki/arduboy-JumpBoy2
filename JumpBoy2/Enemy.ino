@@ -19,8 +19,8 @@ struct Enemy
 
 
 void initEnemy(int no) {
-  if (no > 3) {
-    no = no % 3 + 1;
+  if (no > 5) {
+    no = no % 5;
   }
   enemy.spCount = 0;
   enemy.x = 100;
@@ -57,7 +57,13 @@ void moveCulcEnemy()
       actionEnemyCat();
       break;
     case 3:
-      actionEnemyRobo();
+      actionEnemyDog();
+      break;
+    case 4:
+      actionEnemyAzarashi();
+      break;
+    case 5:
+      actionEnemyKnight();
       break;
     default:
       actionEnemyCat();
@@ -104,7 +110,7 @@ void actionEnemyCat() {
 }
 
 
-void actionEnemyRobo() {
+void actionEnemyDog() {
   if (enemy.spCount > 200) {
     //stop
   }
@@ -118,8 +124,45 @@ void actionEnemyRobo() {
     enemy.y += r * enemy.ay;
     rangeMoveEnemy();
   }
-  arduboy.drawSlowXYBitmap(enemy.x, enemy.y, bEnemyRobo, 16, 16, 1);
+  arduboy.drawSlowXYBitmap(enemy.x, enemy.y, bEnemyDog, 16, 16, 1);
 }
+
+
+void actionEnemyAzarashi() {
+  if (enemy.spCount > 200) {
+    //stop
+  }
+  else if (enemy.spCount > 400) {
+    //restart
+    enemy.spCount = 0;
+  }
+  else {
+    int r = random(3);
+    enemy.x += r * enemy.ax;
+    enemy.y += r * enemy.ay;
+    rangeMoveEnemy();
+  }
+  arduboy.drawSlowXYBitmap(enemy.x, enemy.y, bEnemyAzarashi, 16, 16, 1);
+}
+
+
+void actionEnemyKnight() {
+  if (enemy.spCount > 200) {
+    //stop
+  }
+  else if (enemy.spCount > 400) {
+    //restart
+    enemy.spCount = 0;
+  }
+  else {
+    int r = random(3);
+    enemy.x += r * enemy.ax;
+    enemy.y += r * enemy.ay;
+    rangeMoveEnemy();
+  }
+  arduboy.drawSlowXYBitmap(enemy.x, enemy.y, bEnemyKnight, 16, 16, 1);
+}
+
 
 void rangeMoveEnemy() {
   if (enemy.x < 80) {

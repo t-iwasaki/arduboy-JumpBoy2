@@ -10,6 +10,7 @@
 #include <ArduboyTones.h>
 
 #include "Bitmaps.h"
+#include "Sound.h"
 
 #define NOTE_A1  110  //spring
 #define NOTE_C2  131  //miss spring item(-)
@@ -121,11 +122,15 @@ void enemyAppears()
   arduboy.display();
   initPlayer(pASpeed);
 
+// too hard
+/*
   if (stage >= 6) {
     initBall(stage);
   }
+*/
 
-  sound.tone(NOTE_A4, 200);
+  //  sound.tone(NOTE_A4, 200);
+  sound.tones(songEnemyAppear);
   delay(4000);
 }
 
@@ -135,7 +140,11 @@ void enemyAppears()
   ------------------------------*/
 void stageClear()
 {
-  sound.tone(NOTE_C4, 160);
+  if (stage % 5 == 0) {
+    sound.tones(songStageClear2);
+  } else {
+    sound.tones(songStageClear);
+  }
   delay(3000);
 
   record = stage;

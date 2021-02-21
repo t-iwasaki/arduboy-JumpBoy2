@@ -29,7 +29,7 @@ void initBullet(int no) {
 void fireBullet(int x,int y){
   for (int i = 0; i < CONCURRENT_BULLET_MAX; i++) {
     if (!bullets[i].active) {
-      sound.tone(NOTE_E4, 80);
+      sound.tone(NOTE_E4, 40);
       bullets[i].active = true;
       bullets[i].x = x;
       bullets[i].y = y;
