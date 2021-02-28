@@ -65,7 +65,7 @@ void levelStart(int lvl)
   arduboy.clear();
 
   if (lvl == 1) {
-    stage = 1;
+    stage = 5;
     lives = 3;
     initSpeedScroll(1);
     arduboy.drawSlowXYBitmap(17, 10, bStart, 96, 48, 1);
@@ -140,7 +140,7 @@ void enemyAppears()
   ------------------------------*/
 void stageClear()
 {
-  if (stage % 5 == 0) {
+  if (stage % 10 == 0) {
     sound.tones(songStageClear2);
   } else {
     sound.tones(songStageClear);
