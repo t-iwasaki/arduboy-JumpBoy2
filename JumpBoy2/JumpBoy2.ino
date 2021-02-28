@@ -65,7 +65,7 @@ void levelStart(int lvl)
   arduboy.clear();
 
   if (lvl == 1) {
-    stage = 5;
+    stage = 1;
     lives = 3;
     initSpeedScroll(1);
     arduboy.drawSlowXYBitmap(17, 10, bStart, 96, 48, 1);
