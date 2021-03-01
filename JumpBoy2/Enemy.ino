@@ -51,10 +51,14 @@ void moveCulcEnemy()
 {
   switch (enemy.no) {
     case 1:
+      actionVirtical(1);
+      break;
     case 2:
-      actionUpdown();
+      actionHorizon(1);
       break;
     case 3:
+      actionUpdown();
+      break;
     case 4:
     case 5:
     case 6:
@@ -108,6 +112,42 @@ void actionReflection() {
 }
 
 
+void actionHorizon(int r) {
+  if (enemy.spCount > 200) {
+    //stop
+  }
+  else if (enemy.spCount > 350) {
+    //restart
+    enemy.spCount = 0;
+  }
+  else {
+    enemy.x += r * enemy.ax;
+    if (rangeMoveEnemyX()) {
+      enemy.y += r * enemy.ay;
+    }
+    rangeMoveEnemyY();
+  }
+}
+
+
+void actionVirtical(int r) {
+  if (enemy.spCount > 200) {
+    //stop
+  }
+  else if (enemy.spCount > 350) {
+    //restart
+    enemy.spCount = 0;
+  }
+  else {
+    enemy.y += r * enemy.ay;
+    if (rangeMoveEnemyY()) {
+      enemy.x += r * enemy.ax;
+    }
+    rangeMoveEnemyX();
+  }
+}
+
+
 void actionSpeedUpReflection() {
   if (enemy.spCount > 200) {
     //stop
@@ -126,18 +166,34 @@ void actionSpeedUpReflection() {
 
 
 void rangeMoveEnemy() {
+  rangeMoveEnemyX();
+  rangeMoveEnemyY();
+}
+
+
+bool rangeMoveEnemyX() {
   if (enemy.x < 80) {
     enemy.ax = 1;
+    return true;
   }
   if (enemy.x > 128 - enemy.w - 8) {
     enemy.ax = -1;
+    return true;
   }
+  return false;
+}
+
+
+bool rangeMoveEnemyY() {
   if (enemy.y < 10) {
     enemy.ay = 1;
+    return true;
   }
   if (enemy.y > 64 - 10 - enemy.h) {
     enemy.ay = -1;
+    return true;
   }
+  return false;
 }
 
 
