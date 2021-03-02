@@ -16,6 +16,36 @@
 #define NOTE_C4  523
 
 
+
+const uint16_t songMain[] PROGMEM = {
+  NOTE_G3, 300,
+  NOTE_F3, 300,
+  NOTE_E3, 300,
+  NOTE_C3, 150,
+  NOTE_E3, 300,
+
+  NOTE_G3, 300,
+  NOTE_F3, 300,
+  NOTE_E3, 300,
+  NOTE_C3, 150,
+  NOTE_E3, 300,
+
+  NOTE_G3S, 300,
+  NOTE_G3, 300,
+  NOTE_F3, 300,
+  NOTE_D3, 150,
+  NOTE_F3, 300,
+
+  NOTE_G3S, 300,
+  NOTE_G3, 300,
+  NOTE_F3, 300,
+  NOTE_D3, 150,
+  NOTE_F3, 300,
+  TONES_REPEAT
+};
+
+
+
 const uint16_t songEnemyAppear[] PROGMEM = {
   NOTE_D3, 160,
   NOTE_F3, 160,

@@ -200,8 +200,9 @@ void drawHeader()
   ------------------------ */
 void displayTitle()
 {
-  int flash = 0;
+  //sound.tones(songMain);
 
+  int flash = 0;  
   while (true) {
     delay( 30 );
     arduboy.clear();
