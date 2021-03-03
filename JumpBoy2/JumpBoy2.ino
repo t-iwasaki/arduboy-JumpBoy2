@@ -102,6 +102,7 @@ void miss()
     delay(3000);
 
     initPowerUp();
+    initSpring();
     lives--;
     if (lives <= 0) {
       pMode = MODE_TITLE;
@@ -147,6 +148,13 @@ void stageClear()
   }
   delay(3000);
 
+  arduboy.clear();
+  arduboy.setCursor(36, 1);
+  arduboy.print("Stage:");
+  arduboy.print(stage);
+  arduboy.drawSlowXYBitmap(17, 10, bClear, 96, 48, 1);
+  arduboy.display();
+  
   record = stage;
 
   pASpeed += 0.5;
@@ -165,11 +173,7 @@ void stageClear()
   initSpring();
   initCoin(concurrent_coin_max);
 
-  arduboy.clear();
-  arduboy.drawSlowXYBitmap(17, 10, bClear, 96, 48, 1);
-  arduboy.display();
-
-  delay(2000);
+  delay(4000);
 }
 
 
