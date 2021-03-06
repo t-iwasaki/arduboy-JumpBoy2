@@ -27,6 +27,7 @@
 #define MODE_RUNNING  3
 #define MODE_GAMECLEAR  4
 #define MODE_GAMEOVER  5
+#define MODE_CONTINUE  6
 
 Arduboy2 arduboy;
 ArduboyTones sound(arduboy.audio.enabled);
@@ -42,16 +43,14 @@ unsigned long pWait = 0;
 bool          pWaitFlg = false;
 
 
-float  pASpeed = 1.5;
+float  pASpeed = 1;
 
 uint8_t  boundY = 10;
 uint8_t  boundH = 10;
 
-uint8_t  lives = 3;
-uint8_t  level = 1;
-
-int stage = 1;
-int record = 0;
+uint8_t lives = 3;
+uint8_t stage = 1;
+uint8_t record = 0;
 
 int concurrent_coin_max = 1;
 
@@ -60,31 +59,30 @@ int concurrent_coin_max = 1;
   ------------------------------*/
 void levelStart(int lvl)
 {
-  pASpeed = 1.5;
-
-  arduboy.clear();
-
   if (lvl == 1) {
-    stage = 1;
     lives = 3;
-    initSpeedScroll(1);
+    stage = 1;
+    arduboy.clear();
     arduboy.drawSlowXYBitmap(17, 10, bStart, 96, 48, 1);
+    arduboy.display();
   }
-
-  arduboy.display();
-
   delay(2000);
+
+  record = stage;
+  initSpeedScroll(lvl);
+  pASpeed += lvl * 0.5;
+  if (pASpeed > 2) {
+    pASpeed = 1.5;
+  }
 
   resetKey();
   initPlayer(pASpeed);
   initSpring();
   initCoin(concurrent_coin_max);
   initPowerUp();
-  initEnemy(1);
-  initBall(1);
+  initEnemy(lvl);
+  initBall(lvl);
   initBullet(1);
-
-  level = lvl;
 
   pMode = MODE_RUNNING;
 }
@@ -123,12 +121,12 @@ void enemyAppears()
   arduboy.display();
   initPlayer(pASpeed);
 
-// too hard
-/*
-  if (stage >= 6) {
-    initBall(stage);
-  }
-*/
+  // too hard
+  /*
+    if (stage >= 6) {
+      initBall(stage);
+    }
+  */
 
   //  sound.tone(NOTE_A4, 200);
   sound.tones(songEnemyAppear);
@@ -154,26 +152,9 @@ void stageClear()
   arduboy.print(stage);
   arduboy.drawSlowXYBitmap(17, 10, bClear, 96, 48, 1);
   arduboy.display();
-  
-  record = stage;
-
-  pASpeed += 0.5;
-  speedupScroll();
-
-  if (pASpeed > 2) {
-    pASpeed = 1.5;
-  }
 
   stage += 1;
-  initEnemy(stage);
-
-  resetKey();
-  initBall(stage);
-  initPlayer(pASpeed);
-  initSpring();
-  initCoin(concurrent_coin_max);
-
-  delay(4000);
+  levelStart(stage);
 }
 
 
@@ -206,35 +187,44 @@ void displayTitle()
 {
   //sound.tones(songMain);
 
-  int flash = 0;  
+  int flash = 0;
   while (true) {
     delay( 30 );
     arduboy.clear();
-
-    arduboy.setCursor(36, 1);
+    arduboy.setTextSize(2);
+    arduboy.setCursor(3, 1);
     arduboy.print("JUMP BOY2");
 
-    arduboy.drawSlowXYBitmap(14, 12, bTitle, 104, 36, 1);
+    arduboy.drawSlowXYBitmap(14, 10, bTitle, 104, 36, 1);
 
     flash++;
     flash %= 50;
 
-    if (record > 0) {
-      arduboy.setCursor(30, 44);
-      arduboy.print(" record: ");
-      arduboy.print(record);
-      arduboy.print(" ");
-    }
 
     if (flash < 25) {
-      arduboy.setCursor(30, 54);
+      arduboy.setTextSize(1);
+      arduboy.setCursor(30, 48);
       arduboy.print("Press A or B");
     }
 
+    if (record > 0) {
+      arduboy.setTextSize(1);
+      arduboy.setCursor(1, 56);
+      arduboy.print("record:");
+      arduboy.print(record);
+      arduboy.print(" ");
+      arduboy.print("B:CONTINUE");
+    }
+
+
     arduboy.display();
 
-    if (arduboy.pressed(A_BUTTON) || arduboy.pressed(B_BUTTON)) {
+    if (arduboy.pressed(A_BUTTON)) {
       pMode = MODE_START;
+      break;
+    }
+    if (arduboy.pressed(B_BUTTON)) {
+      pMode = MODE_CONTINUE;
       break;
     }
   }
@@ -266,6 +256,12 @@ void loop()
 
   if (pMode == MODE_START) {
     levelStart(1);
+    return;
+  }
+
+  if (pMode == MODE_CONTINUE) {
+    stage = record;
+    levelStart(stage);
     return;
   }
 
