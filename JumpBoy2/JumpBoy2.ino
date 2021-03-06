@@ -1,3 +1,4 @@
+
 /*----------------------------------
                JumpBoy2
 
@@ -50,18 +51,25 @@ uint8_t  boundH = 10;
 
 uint8_t lives = 3;
 uint8_t stage = 1;
-uint8_t record = 0;
+uint8_t record = 1;
 
 int concurrent_coin_max = 1;
+
 
 /*-------------------------------
     levelStart
   ------------------------------*/
 void levelStart(int lvl)
 {
-  if (lvl == 1) {
+  if (pMode == MODE_START) {
     lives = 3;
     stage = 1;
+  }
+  if (pMode == MODE_CONTINUE) {
+    lives = 3;
+  }
+
+  if (lvl == 1) {
     arduboy.clear();
     arduboy.drawSlowXYBitmap(17, 10, bStart, 96, 48, 1);
     arduboy.display();
@@ -117,6 +125,7 @@ void miss()
 void enemyAppears()
 {
   arduboy.setCursor(5, 30);
+  arduboy.setTextSize(1);
   arduboy.print("Enemy appears!");
   arduboy.display();
   initPlayer(pASpeed);
@@ -147,6 +156,7 @@ void stageClear()
   delay(3000);
 
   arduboy.clear();
+  arduboy.setTextSize(1);
   arduboy.setCursor(36, 1);
   arduboy.print("Stage:");
   arduboy.print(stage);
@@ -167,6 +177,7 @@ void drawHeader()
   for (int i = 0; i < lives; i++) {
     arduboy.drawBitmap(3 + (i * 10) , 1 , bHeart, 8, 8, 0);
   }
+  arduboy.setTextSize(1);
   arduboy.setCursor(60, 1);
   arduboy.write(' ');
   arduboy.write('S');
@@ -210,12 +221,11 @@ void displayTitle()
     if (record > 0) {
       arduboy.setTextSize(1);
       arduboy.setCursor(1, 56);
-      arduboy.print("record:");
+      arduboy.print("Stage:");
       arduboy.print(record);
       arduboy.print(" ");
       arduboy.print("B:CONTINUE");
     }
-
 
     arduboy.display();
 
