@@ -23,7 +23,7 @@ struct Coins
 Coins coins[CONCURRENT_COIN_MAX];
 
 
-void initCoin(int concurrent_coin_max)
+void initCoin(uint8_t concurrent_coin_max)
 {
   coin.spCount = 0;
   coin.qty = 0;
@@ -35,11 +35,16 @@ void initCoin(int concurrent_coin_max)
 }
 
 
-void updateCurrentCoinMax(int concurrent_coin_max)
+void updateCurrentCoinMax(uint8_t concurrent_coin_max)
 {
   coin.concurrent_coin_max = (concurrent_coin_max > CONCURRENT_COIN_MAX ) ? CONCURRENT_COIN_MAX : concurrent_coin_max;
 }
 
+void updateCoinNorma(uint8_t norma1,uint8_t norma2)
+{
+  coin.norma1 = norma1;
+  coin.norma2 = norma2;
+}
 
 void resetSpCount()
 {

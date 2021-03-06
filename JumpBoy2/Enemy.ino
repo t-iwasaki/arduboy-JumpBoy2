@@ -68,6 +68,9 @@ void moveCulcEnemy()
     case 9:
       actionSpeedUpReflection();
       break;
+    case 10:
+      actionUpdown();
+      break;
     default:
       actionUpdown();
       break;
@@ -151,8 +154,9 @@ void actionVirtical(int r) {
 void actionSpeedUpReflection() {
   if (enemy.spCount > 200) {
     //stop
+    fireEnemyFire(enemy.x, enemy.y + enemy.h/2);
   }
-  else if (enemy.spCount > 400) {
+  else if (enemy.spCount > 350) {
     //restart
     enemy.spCount = 0;
   }

@@ -80,6 +80,7 @@ void collisionPlayer()
   collisionCoins(player.x, player.y);
   collisionKey(player.x, player.y, player.w, player.h);
   collisionEnemy(player.x, player.y, player.w, player.h);
+  collisionEnemyFire(player.x, player.y, player.w, player.h);
   collisionBall(player.x, player.y, player.w, player.h);
 }
 

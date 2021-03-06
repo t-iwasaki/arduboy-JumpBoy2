@@ -78,19 +78,21 @@ void levelStart(int lvl)
 
   record = stage;
   initSpeedScroll(lvl);
-  pASpeed += lvl * 0.5;
-  if (pASpeed > 2) {
-    pASpeed = 1.5;
-  }
 
+  pASpeed = 1 + ((lvl-1) % 10 * 0.2);
   resetKey();
   initPlayer(pASpeed);
   initSpring();
   initCoin(concurrent_coin_max);
   initPowerUp();
   initEnemy(lvl);
+  initEnemyFire(1);
   initBall(lvl);
   initBullet(1);
+
+  uint8_t n1 = 5 + lvl/10;
+  uint8_t n2 = 10 + lvl/10;
+  updateCoinNorma(n1, n2);
 
   pMode = MODE_RUNNING;
 }
@@ -298,6 +300,7 @@ void loop()
     moveCoin();
     movePowerUp();
     moveEnemy();
+    moveEnemyFire();
     moveKey();
     moveBall();
     moveBullet();
