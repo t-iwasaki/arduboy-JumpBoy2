@@ -89,3 +89,8 @@ bool duplicatePlayerPosition(float x, float y)
 {
   return (player.x - player.w < x && x < player.x + player.w * 2);
 }
+
+bool collisionPlayerPositionY(float y)
+{
+  return (player.y - player.h < y && y < player.y + player.h * 2);  
+}

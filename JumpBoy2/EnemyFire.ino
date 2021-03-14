@@ -9,7 +9,7 @@ struct EnemyFire
   int h = 4;
   float x = 64;
   float y = 16;
-  int ax = -4;
+  int ax = -2;
   int no = 1;
   int xrange = 0;
   bool active = false;
@@ -21,7 +21,7 @@ void initEnemyFire(int no) {
   for (int i = 0; i < CONCURRENT_ENEMY_FIRE_MAX; i++) {
     enemy_fire[i].no = no;
     enemy_fire[i].active = false;
-    enemy_fire[i].ax = -4;
+    enemy_fire[i].ax = -2;
     enemy_fire[i].xrange = 0;
     enemy_fire[i].x = 0;
     enemy_fire[i].y = 0;
@@ -29,14 +29,15 @@ void initEnemyFire(int no) {
 }
 
 
-void fireEnemyFire(int x, int y) {
+void fireEnemyFire(int x, int y, int ax, int l) {
   for (int i = 0; i < CONCURRENT_ENEMY_FIRE_MAX; i++) {
     if (!enemy_fire[i].active) {
       sound.tone(NOTE_C3, 40);
+      enemy_fire[i].ax = -1 * ax;
       enemy_fire[i].active = true;
       enemy_fire[i].x = x;
       enemy_fire[i].y = y;
-      enemy_fire[i].xrange = x + enemy_fire[i].ax * 5;
+      enemy_fire[i].xrange = x + enemy_fire[i].ax * l;
       return;
     }
   }
@@ -51,7 +52,7 @@ void moveEnemyFire()
       if (enemy_fire[i].x < 0 || enemy_fire[i].x > 128) {
         enemy_fire[i].active = false;
       }
-      
+
       if (enemy_fire[i].x < enemy_fire[i].xrange) {
         enemy_fire[i].active = false;
       }

@@ -77,7 +77,7 @@ void levelStart(int lvl)
   delay(2000);
 
   record = stage;
-  initSpeedScroll(lvl);
+  initSpeedScroll(lvl % 10 + 1);
 
   pASpeed = 1 + ((lvl-1) % 10 * 0.2);
   resetKey();

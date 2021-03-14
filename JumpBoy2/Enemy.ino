@@ -70,6 +70,7 @@ void moveCulcEnemy()
       break;
     case 10:
       actionUpdown();
+      fireEnemyFireToTarget();
       break;
     default:
       actionUpdown();
@@ -154,7 +155,7 @@ void actionVirtical(int r) {
 void actionSpeedUpReflection() {
   if (enemy.spCount > 200) {
     //stop
-    fireEnemyFire(enemy.x, enemy.y + enemy.h/2);
+    fireEnemyFire(enemy.x, enemy.y + enemy.h/2, 4, 5);
   }
   else if (enemy.spCount > 350) {
     //restart
@@ -198,6 +199,13 @@ bool rangeMoveEnemyY() {
     return true;
   }
   return false;
+}
+
+
+void fireEnemyFireToTarget() {
+  if (collisionPlayerPositionY(enemy.y)) {    
+    fireEnemyFire(enemy.x, enemy.y + enemy.h/2, 2, 50);
+  }
 }
 
 
